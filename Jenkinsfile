@@ -11,10 +11,10 @@ pipeline {
             steps {
                 echo '====================--START TEST--===================='
                 sh '''
-                        apt update -y
-                        apt install npm -y
-                        npm --version
-                '''
+                    echo "Checking Node.js and npm versions inside container..."
+                    node -v
+                    npm -v
+		'''
                 echo '====================--TEST complete--===================='
             }
         }
