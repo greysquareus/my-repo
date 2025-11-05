@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Test') {
             agent {
@@ -20,7 +20,7 @@ pipeline {
                 echo '====================--TEST complete--===================='
             }
         }
-
+        
         stage('Build') {
             agent {
                 docker {
@@ -31,24 +31,27 @@ pipeline {
             steps {
                 echo '====================--START BUILD--===================='
                 sh '''
-                    rm -rf node_modules
+                    rm -rf node_modules package-lock.json
                     npm cache clean --force
                     npm ci
                     npm run build
                     ls -la
                 '''
+                echo '====================--BUILD complete--===================='
             }
         }
     }
-}
-
+    
     post {
         always {
             echo '✅ Pipeline finished (cleaning up workspace)...'
             cleanWs()
         }
+        success {
+            echo '✅ Build completed successfully!'
+        }
         failure {
             echo '❌ Build failed. Check logs for details.'
         }
     }
-
+}
