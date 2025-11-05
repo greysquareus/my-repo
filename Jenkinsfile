@@ -52,7 +52,8 @@ pipeline {
             steps {
                 echo '====================--TEST--===================='
                 sh '''
-                    echo 'test wb soon'
+                    test -f build/index.html
+		    npm test
                 '''
                 echo '====================--TEST complete--===================='
             }
