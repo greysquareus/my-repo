@@ -4,16 +4,17 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'node:18-alpine'  
+                    image 'node:18-alpine'
                 }
             }
             steps {
+                echo '====================--START TEST--===================='
                 sh '''
-			apt update 
-			apt install npm
-			npm --version
-		'''
+                        apt update -y
+                        apt install npm -y
+                        npm --version
+                '''
+                echo '====================--TEST complete--===================='
             }
         }
     }
-}
