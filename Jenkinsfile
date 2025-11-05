@@ -31,7 +31,9 @@ pipeline {
             steps {
                 echo '====================--START BUILD--===================='
                 sh '''
-                    npm ci
+                    rm -rf node_modules
+                    npm cache clean --force
+		    npm ci
                     npm run build
                     ls -la
                 '''
