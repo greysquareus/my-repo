@@ -33,7 +33,7 @@ pipeline {
                 sh '''
                     rm -rf node_modules
                     npm cache clean --force
-		    npm ci
+                    npm ci
                     npm run build
                     ls -la
                 '''
@@ -41,3 +41,14 @@ pipeline {
         }
     }
 }
+
+    post {
+        always {
+            echo '✅ Pipeline finished (cleaning up workspace)...'
+            cleanWs()
+        }
+        failure {
+            echo '❌ Build failed. Check logs for details.'
+        }
+    }
+
