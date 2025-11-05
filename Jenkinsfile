@@ -31,10 +31,10 @@ pipeline {
             steps {
                 echo '====================--START BUILD--===================='
                 sh '''
-                    rm -rf node_modules
-                    npm config set cache $(pwd)/.npm-cache --global
-                    npm cache clean --force
-                    npm ci
+                    rm -rf node_modules                                
+		    mkdir -p .npm-cache
+                    export NPM_CONFIG_CACHE=$(pwd)/.npm-cache
+		    npm ci
                     npm run build
                     ls -la
                 '''
