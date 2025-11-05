@@ -32,6 +32,7 @@ pipeline {
                 echo '====================--START BUILD--===================='
                 sh '''
                     rm -rf node_modules
+                    npm config set cache $(pwd)/.npm-cache --global
                     npm cache clean --force
                     npm ci
                     npm run build
