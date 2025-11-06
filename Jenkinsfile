@@ -70,8 +70,8 @@ pipeline {
                 echo '====================--DEPLOY--===================='
                 sh '''
 		    mkdir -p .npm
-		    npm config set cache $(pwd)/.npm
-                    npm install -g serve
+                    npm config --userconfig $(pwd)/.npmrc set cache $(pwd)/.npm
+		    npm install -g serve
                     npx serve -s build -l 5050
                     echo "Server runned successfully"
                 '''
