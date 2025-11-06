@@ -58,6 +58,25 @@ pipeline {
                 echo '====================--TEST complete--===================='
             }
         }
+
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                echo '====================--DEPLOY--===================='
+                sh '''
+                    npm install -g serve
+                    serve -g build
+                    echo "Server runned successfully"
+                    sleep 30
+                '''
+                echo '====================--DEPLOY-COMPLETED--===================='
+            }
+        }
     }
     
     post {
