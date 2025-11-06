@@ -70,20 +70,18 @@ pipeline {
                 echo '====================--DEPLOY--===================='
                 sh '''
                     npm install -g serve
-                    serve -g build
+                    serve -s build -l 5050
                     echo "Server runned successfully"
-                    sleep 30
                 '''
+                sleep 30
                 echo '====================--DEPLOY-COMPLETED--===================='
             }
         }
     }
     
     post {
-        post {
-            always {
+        always {
                 junit 'test-result/junit.xml'
-            }
         }
         success {
             echo '✅ Build completed successfully!'
