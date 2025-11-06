@@ -69,7 +69,9 @@ pipeline {
             steps {
                 echo '====================--DEPLOY--===================='
                 sh '''
-                    npm install serve
+		    mkdir -p .npm
+		    npm config set cache $(pwd)/.npm
+                    npm install -g serve
                     npx serve -s build -l 5050
                     echo "Server runned successfully"
                 '''
@@ -81,7 +83,7 @@ pipeline {
     
     post {
         always {
-                junit 'test-results/junit.xml'
+		junit 'test-results/junit.xml'
         }
         success {
             echo '✅ Build completed successfully!'
