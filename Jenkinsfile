@@ -53,7 +53,7 @@ pipeline {
                 echo '====================--TEST--===================='
                 sh '''
                     test -f build/index.html
-		    npm test
+                    npm test
                 '''
                 echo '====================--TEST complete--===================='
             }
@@ -61,6 +61,11 @@ pipeline {
     }
     
     post {
+        post {
+            always {
+                junit 'test-result/junit.xml'
+            }
+        }
         success {
             echo '✅ Build completed successfully!'
         }
