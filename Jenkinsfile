@@ -64,7 +64,7 @@ pipeline {
         stage('End-to-end Test') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-noble'
+                    image 'mcr.microsoft.com/playwright:v1.46.0-focal'
                     reuseNode true
 		    
                 }
