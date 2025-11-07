@@ -64,7 +64,7 @@ pipeline {
         stage('End-to-end Test') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.56.1-noble'
+                    image 'mcr.microsoft.com/playwright:v1.39.0-noble'
                     reuseNode true
 		    
                 }
@@ -91,7 +91,7 @@ pipeline {
             steps {
                 echo '====================--DEPLOY--===================='
                 sh '''
-                    npx serve -s build -l 5050
+                    node_modules/.bin/serve -s build &
                     echo "Server runned successfully"
                 '''
                 sleep 30
