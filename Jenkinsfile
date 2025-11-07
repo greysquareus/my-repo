@@ -73,7 +73,8 @@ pipeline {
                 echo '====================--TEST--===================='
                 sh '''
                     npm install serve
-                    node_modules/.bin/serve -s build
+                    node_modules/.bin/serve -s build &
+		    sleep 20
                     npx playwright test
                 '''
                 echo '====================--TEST complete--===================='
@@ -101,7 +102,7 @@ pipeline {
     
     post {
         always {
-                junit 'test-results/junit.xml'
+                junit 'jest-results/junit.xml'
         }
         success {
             echo '✅ Build completed successfully!'
