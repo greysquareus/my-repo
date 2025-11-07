@@ -36,7 +36,6 @@ pipeline {
                     export NPM_CONFIG_CACHE=$(pwd)/.npm-cache
                     npm ci
                     npm run build
-                    ls -la
                 '''
                 echo '====================--BUILD complete--===================='
             }
@@ -59,25 +58,36 @@ pipeline {
             }
         }
 
-
-
         stage('End-to-end Test') {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.46.0-focal'
                     reuseNode true
-		    
                 }
             }
             steps {
-                echo '====================--TEST--===================='
+                echo '====================--E2E TEST START--===================='
                 sh '''
+                    # Обновляем Playwright до версии, соответствующей контейнеру
+                    npm install -D @playwright/test@1.46.0
+
+                    # Ставим serve для локального тест-сервера
                     npm install serve
-                    node_modules/.bin/serve -s build &
-		    sleep 20
+
+                    # Запускаем сервер на фоне
+                    npx serve -s build &
+                    SERVER_PID=$!
+                    
+                    # Даем время серверу запуститься
+                    sleep 15
+
+                    # Запускаем тесты
                     npx playwright test
+
+                    # Убиваем сервер после тестов
+                    kill $SERVER_PID || true
                 '''
-                echo '====================--TEST complete--===================='
+                echo '====================--E2E TEST COMPLETE--===================='
             }
         }
 
@@ -91,18 +101,18 @@ pipeline {
             steps {
                 echo '====================--DEPLOY--===================='
                 sh '''
-                    node_modules/.bin/serve -s build &
-                    echo "Server runned successfully"
+                    npx serve -s build &
+                    echo "Server started successfully"
                 '''
                 sleep 30
-                echo '====================--DEPLOY-COMPLETED--===================='
+                echo '====================--DEPLOY COMPLETED--===================='
             }
         }
     }
     
     post {
         always {
-                junit 'jest-results/junit.xml'
+            junit 'jest-results/junit.xml'
         }
         success {
             echo '✅ Build completed successfully!'
@@ -112,3 +122,4 @@ pipeline {
         }
     }
 }
+
